@@ -308,31 +308,36 @@ const getUsers = (request, response) => {
       response.status(200).send(`Answer deleted with ID: ${id}`)
     })
   }
-  function validateUserData(req, res, next) {
+  
+  
+  const Register = (async (req, res) => {
     const { username, email, password } = req.body;
   
     if (!username || !email || !password) {
       return res.status(400).json({ error: 'All fields are required' });
     }
   
-    // Add more validation rules as per your requirements
-    // For example, checking email format, password complexity, etc.
-  
-    next();
-  }
-  
-  
-  
-  
-  const Register = (validateUserData, async (req, res) => {
-    const { username, email, password } = req.body;
-  
     try {
+  
+      const emailExistsQuery = 'SELECT * FROM users WHERE email = $1';
+      const emailExistsValues = [email];
+      const emailExistsResult = await pool.query(emailExistsQuery, emailExistsValues);
+      if (emailExistsResult.rowCount > 0) {
+        return res.status(409).json({ error: 'Email is already registered' });
+      }
+  
+      // Check if the username already 
+      const usernameExistsQuery = 'SELECT * FROM users WHERE username = $1';
+      const usernameExistsValues = [username];
+      const usernameExistsResult = await pool.query(usernameExistsQuery, usernameExistsValues);
+      if (usernameExistsResult.rowCount > 0) {
+        return res.status(409).json({ error: 'Username is already registered' });
+      }
+  
       const hashedPassword = await bcrypt.hash(password, 10);
   
       const query = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)';
       const values = [username, email, hashedPassword];
-  
       await pool.query(query, values);
       res.status(201).json({ message: 'User registered successfully' });
     } catch (err) {
@@ -340,6 +345,8 @@ const getUsers = (request, response) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+  
+  
   
   const Login = (async (req, res) => {
     const { username, password } = req.body;
@@ -369,6 +376,10 @@ const getUsers = (request, response) => {
     }
   });
 
+  const Logout = ((req, res) => {
+
+    res.json({ message: 'Logout successful' });
+  });
 
 
 
