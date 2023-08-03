@@ -349,14 +349,14 @@ const getUsers = (request, response) => {
   
   
   const Login = (async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
   
     try {
-      const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+      const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
       const user = result.rows[0];
   
       if (!user) {
-        return res.status(401).json({ error: 'Invalid username' });
+        return res.status(401).json({ error: 'Invalid email' });
       }
   
         const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -417,5 +417,6 @@ const getUsers = (request, response) => {
     
     Register,
     Login,
+    Logout,
 
   }

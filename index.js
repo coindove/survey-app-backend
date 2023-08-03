@@ -54,6 +54,8 @@ app.delete('/options/:id', db.deleteOption)
 app.post('/register', db.Register)
  app.post('/login', db.Login)
 
+ app.post('/logout', db.Logout)
+
 
 
 
