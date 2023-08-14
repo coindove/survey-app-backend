@@ -4,8 +4,8 @@ const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'survey_app',
-  password: '123456',
+  database: 'survey',
+  password: 'Chimwemwe',
   port: 5432, 
 })
 /// get user
@@ -326,7 +326,7 @@ const getUsers = (request, response) => {
         return res.status(409).json({ error: 'Email is already registered' });
       }
   
-      // Check if the username already 
+      // Check if user already exist 
       const usernameExistsQuery = 'SELECT * FROM users WHERE username = $1';
       const usernameExistsValues = [username];
       const usernameExistsResult = await pool.query(usernameExistsQuery, usernameExistsValues);

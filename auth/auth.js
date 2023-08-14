@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
 const bcrypt = require('bcrypt');
+const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const bodyParser = require('body-parser');
-const port = 3000
+const port = 4000
 const Pool = require('pg').Pool
 const pool = new Pool({
   user: 'postgres',
@@ -14,7 +15,7 @@ const pool = new Pool({
 })
 
 
-
+app.use(cors());
 app.use(bodyParser.json());
 ///----> user registration middleware
 function validateUserData(req, res, next) {
